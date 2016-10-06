@@ -2,6 +2,8 @@
 #include "exceptions.h"
 #include "parcer.h"
 #include "routingtablessolver.h"
+#include <fstream>
+#include <ctime>
 
 #include <string.h>
 
@@ -19,14 +21,31 @@ void printNotes(){
     cout<<endl;
 }
 
+void generateTopo(int topoSize, string outfile, int neighProb, int maxPrior){
+    ofstream fout(outfile);
+    ensureExp(fout.is_open(), true, "cant generate topo");
+    for (int node=0;node<topoSize;node++){  //для каждой вершины
+        for (int neighbour=0;neighbour<topoSize;neighbour++){  //ищем соседа
+            if (rand()%neighProb!=0)
+                continue;
+            fout<<node<<" "<<neighbour<<" "<<rand()%maxPrior+1<<endl;
+        }
+    }
+    fout.close();
+}
+
 int main(int argc, char **argv){
     try{
         printNotes();
+//        generateTopo(5000, "5000-1000-5.txt", 1000, 5);
         ensureExp(argc==2, 0, "Usage ./QratorTestTask <filename>");
+
+        clock_t begin = clock();
         Parcer parcer = Parcer(argv[1]);
-        cout<<"File successfully parced!"<<endl;
+        cout<<"File successfully parced in "<<double(clock() - begin) / CLOCKS_PER_SEC<<" ms"<<endl;
+
         cout<<"Starting solving..."<<endl;
-        routingTablesSolver solver = routingTablesSolver(parcer.getConRpiorMatrix(), parcer.getRevASNum());
+        routingTablesSolver solver(parcer.getConRpiorMatrix(), parcer.getRevASNum());
         return 0;
     }
     catch (Exceptions ex){

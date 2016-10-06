@@ -1,14 +1,19 @@
 #include "routingtablessolver.h"
+#include <ctime>
 
 routingTablesSolver::routingTablesSolver(const vector< vector<int> >* conPriorMatrix, const map <int,int>* RevASNum){
     topoSize = RevASNum->size();
     fillRoutersInfo(RevASNum);
+
     cout<<"Making passible rules...        ";
+    clock_t begin = clock();
     makePossibleRoutes(conPriorMatrix);	//получаем всевозможные пути от 0 до всех узлов без повторений
-    cout<<"done!"<<endl;
+    cout<<"done in "<<double(clock() - begin) / CLOCKS_PER_SEC<<" ms"<<endl;
+
     cout<<"Calculating routers rules...    ";
+    begin = clock();
     calculateRules(conPriorMatrix);			//вычисляем итоговые правила
-    cout<<"done!"<<endl;
+    cout<<"done in "<<double(clock() - begin) / CLOCKS_PER_SEC<<" ms"<<endl;
     pintRules();
 }
 
