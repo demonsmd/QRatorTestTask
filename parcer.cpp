@@ -30,14 +30,9 @@ Parcer::Parcer(string inFile){
     fin.close();
     fin.clear();
 
-    //создаём матрицу связности нужного размера
+    //создаём матрицу связности нужного размера и заполняем -1
     topoSize=ASNum.size();
-    conPriorMatrix.resize(topoSize);
-    for (int i=0;i<topoSize;i++){
-        conPriorMatrix[i].resize(topoSize);
-        for (int j=0;j<topoSize;j++)
-            conPriorMatrix[i][j]=-1;
-    }
+    conPriorMatrix = new SqrMatrix<int>(topoSize, -1);
 
     //заполняем матрицу
     fin.open(inFile);
@@ -50,7 +45,7 @@ Parcer::Parcer(string inFile){
         is>>priority;
         i=ASNum.find(src)->second;
         j=ASNum.find(dst)->second;
-        conPriorMatrix[j][i]=priority;
+        conPriorMatrix->getElem(j,i)=priority;
     }
     fin.close();
 }

@@ -12,7 +12,8 @@ HEADERS += \
     exceptions.h \
     types.h \
     parcer.h \
-    routingtablessolver.h
+    routingtablessolver.h \
+    matrix.h
 
 DISTFILES += \
     readme.txt

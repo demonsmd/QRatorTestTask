@@ -1,4 +1,6 @@
-﻿#include "types.h"
+﻿#define MAINFILE
+
+#include "types.h"
 #include "exceptions.h"
 #include "parcer.h"
 #include "routingtablessolver.h"
@@ -37,23 +39,33 @@ void generateTopo(int topoSize, string outfile, int neighProb, int maxPrior){
 int main(int argc, char **argv){
     try{
         printNotes();
-//        generateTopo(5000, "5000-1000-5.txt", 1000, 5);
-        ensureExp(argc==2, 0, "Usage ./QratorTestTask <filename>");
+//        generateTopo(100000, "100000-10000-10.txt", 10000, 10);
+        ensureExp(argc==3, 0, "Usage ./QratorTestTask <filename> <logFile>");
 
+        logFile = argv[2];
+        logStream.open(logFile);
+        ensureExp(logStream.is_open(), true, "cant open log file");
         clock_t begin = clock();
         Parcer parcer = Parcer(argv[1]);
-        cout<<"File successfully parced in "<<double(clock() - begin) / CLOCKS_PER_SEC<<" ms"<<endl;
+        cout<<"File successfully parced in "<<double(clock() - begin) / CLOCKS_PER_SEC<<" s"<<endl;
+        logStream<<"File successfully parced in "<<double(clock() - begin) / CLOCKS_PER_SEC<<" s"<<endl;
 
-        cout<<"Starting solving..."<<endl;
-        routingTablesSolver solver(parcer.getConRpiorMatrix(), parcer.getRevASNum());
+//        PossibleTopoRoutesBasedAlgorithm solver(parcer.getConRpiorMatrix(), parcer.getRevASNum());
+        DijkstraBasedAlgotithm solver(parcer.getConRpiorMatrix(), parcer.getRevASNum());
+        solver.Solve();
+        logStream.close();
         return 0;
     }
     catch (Exceptions ex){
         cout<<ex.message<<endl;
+        logStream<<ex.message<<endl;
+        logStream.close();
         exit(1);
     }
     catch (...){
-        cout<<"WTF?"<<endl;
+        cout<<"uncought exception"<<endl;
+        logStream<<"uncought exception"<<endl;
+        logStream.close();
         exit(1);
     }
 }
