@@ -32,7 +32,6 @@ Parcer::Parcer(string inFile){
 
     //создаём матрицу связности нужного размера и заполняем -1
     topoSize=ASNum.size();
-    conPriorMatrix = new SqrMatrix<int>(topoSize, -1);
 
     //заполняем матрицу
     fin.open(inFile);
@@ -45,7 +44,8 @@ Parcer::Parcer(string inFile){
         is>>priority;
         i=ASNum.find(src)->second;
         j=ASNum.find(dst)->second;
-        conPriorMatrix->getElem(j,i)=priority;
+        conPriorMap.insert(pair<int, conPair>(i, conPair(j, priority)));
+        revConPriorMap.insert(pair<int, conPair>(j, conPair(i, priority)));
     }
     fin.close();
 }

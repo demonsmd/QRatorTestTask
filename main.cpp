@@ -39,7 +39,7 @@ void generateTopo(int topoSize, string outfile, int neighProb, int maxPrior){
 int main(int argc, char **argv){
     try{
         printNotes();
-//        generateTopo(100000, "100000-10000-10.txt", 10000, 10);
+//        generateTopo(100000, "100000-30000-10.txt", 30000, 10);
         ensureExp(argc==3, 0, "Usage ./QratorTestTask <filename> <logFile>");
 
         logFile = argv[2];
@@ -51,7 +51,7 @@ int main(int argc, char **argv){
         logStream<<"File successfully parced in "<<double(clock() - begin) / CLOCKS_PER_SEC<<" s"<<endl;
 
 //        PossibleTopoRoutesBasedAlgorithm solver(parcer.getConRpiorMatrix(), parcer.getRevASNum());
-        DijkstraBasedAlgotithm solver(parcer.getConRpiorMatrix(), parcer.getRevASNum());
+        DijkstraBasedAlgotithm solver(parcer.getConRpiorMap(), parcer.getRevConRpiorMap(), parcer.getRevASNum());
         solver.Solve();
         logStream.close();
         return 0;

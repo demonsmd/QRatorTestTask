@@ -11,11 +11,14 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include <map>
 
 #define INF 2000000000
 
 typedef std::vector<int> TopoPath;
 typedef std::vector<TopoPath> NodeTopoPaths;
+typedef std::pair<int, int> conPair;        //dst, prior
+typedef std::multimap<int, conPair> ConPriorMMap;        //src, <dst, prior>
 
 using namespace std;
 
